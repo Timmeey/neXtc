@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Timmeey/neXtc.svg?branch=master)](https://travis-ci.org/Timmeey/neXtc)
 # neXtc
 Little CoinMarketCap percent change notifier
 
