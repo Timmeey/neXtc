@@ -34,11 +34,6 @@
             <version>0.25.6</version>
         </dependency>
         <dependency>
-            <groupId>de.timmeey</groupId>
-            <artifactId>libTimmeey</artifactId>
-            <version>0.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
