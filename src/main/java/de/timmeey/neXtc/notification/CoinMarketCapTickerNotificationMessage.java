@@ -13,7 +13,7 @@ public class CoinMarketCapTickerNotificationMessage {
 
     private final CoinMarketCapTicker src;
     private final static String markdownMessage =
-        "US$ price of %s is: %s \n\n" +
+        " <!channel> US$ price of %s is: %s \n\n" +
             "| Period  | Change | \n" +
             "  | :-------|:------|\n" +
             "  | 1 Hour  | %s     |\n" +
@@ -21,7 +21,7 @@ public class CoinMarketCapTickerNotificationMessage {
             "  | 7 Days  | %s     |\n";
 
     private final static String plaintextMessage =
-        "US$ price of %s is: %s. With changes of 1Hour: %s, 1Day: %s, 7Days: " +
+        " <!channel> US$ price of %s is: %s. With changes of 1Hour: %s, 1Day: %s, 7Days: " +
             "%s";
 
     public CoinMarketCapTickerNotificationMessage(final CoinMarketCapTicker ticker) {
