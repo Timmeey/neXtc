@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class CoinMarketCapAnalysis {
     private static final double THRESHOLD = 20;
-    private static final double RE_NOTIFY_THRESHOLD=10;
+    private static final double RE_NOTIFY_THRESHOLD = 10;
 
     private final Set<NotificationChannel> notifactionChannels;
     private double lastHour = 0;
@@ -27,16 +27,18 @@ public class CoinMarketCapAnalysis {
     }
 
     public void analyze(CoinMarketCapTicker ticker) {
-        if (hourTrigger(ticker)||dayTrigger(ticker)||weekTrigger(ticker)) {
-            CoinMarketCapTickerNotificationMessage message = new CoinMarketCapTickerNotificationMessage(ticker);
-            this.notifactionChannels.forEach(nc ->sendMessage(nc,message));
+        if (hourTrigger(ticker) || dayTrigger(ticker) || weekTrigger(ticker)) {
+            CoinMarketCapTickerNotificationMessage message = new
+                CoinMarketCapTickerNotificationMessage(ticker);
+            this.notifactionChannels.forEach(nc -> sendMessage(nc, message));
         }
-        this.lastHour=ticker.percentChangeHour();
-        this.lastDay=ticker.percentChangeDay();
-        this.lastWeek=ticker.percentChangeWeek();
+        this.lastHour = Math.abs(ticker.percentChangeHour());
+        this.lastDay = Math.abs(ticker.percentChangeDay());
+        this.lastWeek = Math.abs(ticker.percentChangeWeek());
     }
 
-    private void sendMessage(NotificationChannel channel, CoinMarketCapTickerNotificationMessage message){
+    private void sendMessage(NotificationChannel channel,
+        CoinMarketCapTickerNotificationMessage message) {
         try {
             channel.notify(message);
         } catch (IOException e) {
@@ -45,17 +47,28 @@ public class CoinMarketCapAnalysis {
     }
 
     private boolean hourTrigger(CoinMarketCapTicker ticker) {
-        return ticker.percentChangeHour() > THRESHOLD &&
-            ticker.percentChangeHour() > lastHour+RE_NOTIFY_THRESHOLD;
+        return crossed(this.lastHour, ticker.percentChangeHour(), THRESHOLD);
     }
 
     private boolean dayTrigger(CoinMarketCapTicker ticker) {
-        return ticker.percentChangeDay() > THRESHOLD &&
-            ticker.percentChangeDay() > lastDay+RE_NOTIFY_THRESHOLD;
+        return crossed(this.lastDay, ticker.percentChangeDay(), THRESHOLD);
     }
 
     private boolean weekTrigger(CoinMarketCapTicker ticker) {
-        return ticker.percentChangeWeek() > THRESHOLD &&
-            ticker.percentChangeWeek() > lastWeek+RE_NOTIFY_THRESHOLD;
+        return crossed(this.lastWeek, ticker.percentChangeWeek(), THRESHOLD);
+    }
+
+    /**
+     * Returns true if the value jumped over the threshold
+     * @param last
+     * @param now
+     * @param threshold
+     * @return
+     */
+    private boolean crossed(double last, double now, double threshold) {
+        last = Math.abs(last);
+        now = Math.abs(now);
+        return last < threshold && now > threshold ||
+            last < threshold+10 && now > threshold+10;
     }
 }
